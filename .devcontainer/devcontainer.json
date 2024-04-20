@@ -7,5 +7,7 @@
 		"ghcr.io/prulloac/devcontainer-features/chezmoi:1": {},
 		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-	}
+	},
+
+	"postCreateCommand": "pre-commit install",
 }
