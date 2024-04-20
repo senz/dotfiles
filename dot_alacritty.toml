@@ -1,0 +1,37 @@
+live_config_reload = true
+
+[cursor]
+blink_interval = 750
+blink_timeout = 0
+vi_mode_style = "Underline"
+
+[cursor.style]
+blinking = "Always"
+shape = "Block"
+
+[font]
+size = 13.0
+
+[[keyboard.bindings]]
+action = "ToggleViMode"
+key = "Space"
+mode = "~Search"
+mods = "Alt|Shift|Control"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = true
+
+[window]
+dynamic_padding = true
+opacity = 0.9
+
+[window.padding]
+x = 9
+y = 9

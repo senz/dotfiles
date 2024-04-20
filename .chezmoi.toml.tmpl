@@ -1,0 +1,14 @@
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $recipient := promptStringOnce . "recipient" "GPG recipient" -}}
+{{- $fullname := promptStringOnce . "fullname" "Full name" -}}
+[data]
+    email = {{ $email | quote }}
+    recipient = {{ $recipient | quote }}
+    fullname = {{ $fullname | quote }}
+
+encryption = "gpg"
+[gpg]
+    recipient = {{ $recipient | quote }}
+[git]
+    autoCommit = true
+#    autoPush = true

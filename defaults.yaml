@@ -1,0 +1,71 @@
+NSGlobalDomain:
+  # System Preferences > Keyboard > Shortcuts > Full Keyboard Access > All
+  # controls.
+  AppleKeyboardUIMode: 3
+
+  # System Preferences > General > Sidebar icon size > Large.
+  NSTableViewDefaultSizeMode: 3
+
+  # Disable press and hold character picker.
+  ApplePressAndHoldEnabled: false
+
+  # Disable smooth scrolling.
+  NSScrollAnimationEnabled: false
+
+  # disable text replacement
+  NSAutomaticSpellingCorrectionEnabled: false
+  NSAutomaticQuoteSubstitutionEnabled: false
+  NSAutomaticCapitalizationEnabled: false
+  NSAutomaticDashSubstitutionEnabled: false
+  NSAutomaticPeriodSubstitutionEnabled: false
+  WebAutomaticSpellingCorrectionEnabled: false
+
+com.apple.desktopservices:
+  # Disable .DS_Store files on network drives.
+  DSDontWriteNetworkStores: true
+
+  # Disable .DS_Store files on external drives.
+  DSDontWriteUSBStores: true
+
+com.apple.finder:
+  # Finder > View > Show view options > Sort Group By > Name.
+  FXArrangeGroupViewBy: Name
+
+  # Finder > Preferences > Advanced > When performing a search > Search the
+  # current folder.
+  FXDefaultSearchScope: SCcf
+
+  # Finder > View > Show view options > Group By > None.
+  FXPreferredGroupBy: None
+
+  # Finder > View > As List.
+  FXPreferredViewStyle: Nlsv
+
+  # Finder > Preferences > New Finder windows show > Home directory.
+  NewWindowTarget: PfHm
+
+  # Finder > Preferences > New Finder windows show > Home directory.
+  NewWindowTargetPath: "file://${HOME}"
+
+  # Enable "Quit Finder" menu item.
+  QuitMenuItem: true
+
+  # Finder > Preferences > Show these items on the desktop > Hard disks.
+  ShowHardDrivesOnDesktop: false
+
+com.apple.TextEdit:
+  # TextEdit > Preferences > New Document > Plain text.
+  RichText: false
+
+com.apple.Terminal:
+  # Terminal > Secure Keyboard Entry.
+  SecureKeyboardEntry: true
+
+com.apple.SoftwareUpdate:
+  # System Preferences > Software Update > Advanced... > Automatically check
+  # for updates.
+  AutomaticCheckEnabled: true
+
+  # System Preferences > Software Update > Advanced... > Download new updates
+  # when available.
+  AutomaticDownload: true
