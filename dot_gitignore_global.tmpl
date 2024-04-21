@@ -1,0 +1,5 @@
+{{ if not $REMOTE_CONTAINERS -}}
+{{ # we do not manage git in devcontainers -}}
+.env
+.DS_Store
+{{ end -}}
