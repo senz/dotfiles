@@ -1,0 +1,15 @@
+{{ if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+set -eu
+
+# install homebrew casks/brews
+export HOMEBREW_CASK_OPTS=--no-quarantine
+
+# combine shared and private encrypted parts
+# rendering directly in template, so chezmoi could detect a change of content
+brew bundle install -v --no-lock --file=/dev/stdin <<EOF
+{{ joinPath .chezmoi.sourceDir "Brewfile" | include }}
+{{ joinPath .chezmoi.sourceDir "Brewfile.pers.asc" | include | decrypt }}
+EOF
+
+{{ end -}}
