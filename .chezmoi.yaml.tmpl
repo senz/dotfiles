@@ -14,8 +14,8 @@
 
 {{ if not ( env "REMOTE_CONTAINERS" | empty ) -}}
 {{/* # in devcontainer predefined source is home/dotfiles */}}
-sourceDir: {{ joinPath ( env "HOME" ) "dotfiles" }}
-{{- end -}}
+sourceDir: {{ joinPath .chezmoi.homeDir "dotfiles" }}
+{{ end -}}
 
 encryption: "gpg"
 
