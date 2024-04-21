@@ -1,4 +1,4 @@
-{{ if not ( env "REMOTE_CONTAINERS" | empty ) -}}
+{{ if ( env "REMOTE_CONTAINERS" | empty ) -}}
 {{/* we do not manage git in devcontainers */}}
 .env
 .DS_Store
