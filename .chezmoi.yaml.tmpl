@@ -2,7 +2,7 @@
 {{- $recipient := "" -}}
 {{- $fullname := "" -}}
 {{- if stdinIsATTY -}}
-{{- # we are in interactive mode -}}
+{{/* we are in interactive mode */}}
 {{-   $email := promptStringOnce . "email" "Email address" -}}
 {{-   $recipient := promptStringOnce . "recipient" "GPG recipient" -}}
 {{-   $fullname := promptStringOnce . "fullname" "Full name" -}}
@@ -12,9 +12,9 @@
 {{-   $fullname = "User" -}}
 {{- end -}}
 
-{{ if $REMOTE_CONTAINERS -}}
-{{- # in devcontainer predefined source is home/dotfiles -}}
-sourceDir: {{ joinPath $HOME "dotfiles" }}
+{{ if not ( env "REMOTE_CONTAINERS" | empty ) -}}
+{{/* # in devcontainer predefined source is home/dotfiles */}}
+sourceDir: {{ joinPath env "HOME" "dotfiles" }}
 {{- end -}}
 
 encryption: "gpg"

@@ -1,5 +1,5 @@
-{{ if not $REMOTE_CONTAINERS -}}
-{{ # we do not manage git in devcontainers -}}
+{{ if not ( env "REMOTE_CONTAINERS" | empty ) -}}
+{{/* we do not manage git in devcontainers */}}
 [user]
 	name = {{ .fullname }}
 	email = {{ .email }}
