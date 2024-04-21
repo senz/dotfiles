@@ -26,9 +26,9 @@ install_chezmoi() {
 prepare_devcontainer() {
   echo "Running in devcontainer/codespace"
   if [ ! -f ~/.config/chezmoi/chezmoi.yaml ]; then
-    mkdir -p $HOME/.config/chezmoi
+    mkdir -p "$HOME/.config/chezmoi"
     echo "pre-populating config from gitconfig"
-    cat <<EOF > $HOME/.config/chezmoi/chezmoi.yaml
+    cat <<EOF > "$HOME/.config/chezmoi/chezmoi.yaml"
 ---
 sourceDir: $HOME/dotfiles
 data:
