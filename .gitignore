@@ -1,3 +1,6 @@
 symlinks/wireshark/recent
 symlinks/wireshark/recent_common
 Brewfile.lock.json
+# bin file
+chezmoi
+.devcontainer/devcontainer-lock.json

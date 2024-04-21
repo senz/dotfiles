@@ -1,6 +1,21 @@
-{{ $email := promptStringOnce . "email" "Email address" -}}
-{{- $recipient := promptStringOnce . "recipient" "GPG recipient" -}}
-{{- $fullname := promptStringOnce . "fullname" "Full name" -}}
+{{ $email := "" -}}
+{{- $recipient := "" -}}
+{{- $fullname := "" -}}
+{{- if stdinIsATTY -}}
+{{- # we are in interactive mode -}}
+{{-   $email := promptStringOnce . "email" "Email address" -}}
+{{-   $recipient := promptStringOnce . "recipient" "GPG recipient" -}}
+{{-   $fullname := promptStringOnce . "fullname" "Full name" -}}
+{{- else -}}
+{{-   $email = "user@example.com" -}}
+{{-   $recipient = "XXX" -}}
+{{-   $fullname = "User" -}}
+{{- end -}}
+
+{{ if $REMOTE_CONTAINERS -}}
+{{- # in devcontainer predefined source is home/dotfiles -}}
+sourceDir: {{ joinPath $HOME "dotfiles" }}
+{{- end -}}
 
 encryption: "gpg"
 
