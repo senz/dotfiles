@@ -30,6 +30,7 @@ prepare_devcontainer() {
     echo "pre-populating config from gitconfig"
     cat <<EOF > $HOME/.config/chezmoi/chezmoi.yaml
 ---
+sourceDir: $HOME/dotfiles
 data:
   fullname: $(git config --get user.name)
   email: $(git config --get user.email)
