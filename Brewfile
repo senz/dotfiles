@@ -2,6 +2,7 @@ tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/services"
+tap "senz/homebrew-tap"
 
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
@@ -118,4 +119,7 @@ cask "vlc"
 cask "wacom-tablet"
 # Compatibility layer to run Windows applications
 cask "wine-devel"
+# Discord and SpaceBar client implemented without Discord API
+cask "webcord"
+
 mas "Brother P-touch Editor", id: 1453365242
