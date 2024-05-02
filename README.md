@@ -57,6 +57,7 @@ chezmoi purge
 
 - [ ] Setup gpg and gpg-agent
 - [ ] Import gpg keys
+- [ ] (Linux) install https://github.com/Xgames123/git-credential-github
 
 ## TODO
 

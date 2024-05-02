@@ -23,7 +23,15 @@
 [commit]
 	gpgsign = true
 [credential]
+{{- if (eq .chezmoi.os "darwin") }}
 	helper = /usr/local/share/gcm-core/git-credential-manager
+{{ end -}}
+{{- if (eq .chezmoi.os "linux") }}
+	credentialStore = secretservice
+[credential "https://github.com"]
+  helper = cache
+  helper = github # important that you put it last because we only need to run gcg when other helpers have failed to give credentials
+{{ end -}}
 [credential "https://dev.azure.com"]
 	useHttpPath = true
 {{ end -}}
