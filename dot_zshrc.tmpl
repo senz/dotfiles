@@ -119,9 +119,11 @@ autoload -U +X bashcompinit && bashcompinit
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
+export PATH="$HOME/.bin:$HOME/bin:$PATH:$HOME/go/bin"
 
-export PATH="$HOME/.bin:$PATH:$HOME/go/bin"
-export TERM=alacritty
+if command -v alacritty &>/dev/null; then
+  export TERM=alacritty
+fi
 
 eval "$(register-python-argcomplete pipx)"
 

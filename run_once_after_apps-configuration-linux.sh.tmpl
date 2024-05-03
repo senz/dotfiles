@@ -1,6 +1,8 @@
 {{ if (eq .chezmoi.os "linux") -}}
 #!/bin/bash
 
+pip install argcomplete
+
 # Check if Oh My Zsh is installed
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     # Install Oh My Zsh

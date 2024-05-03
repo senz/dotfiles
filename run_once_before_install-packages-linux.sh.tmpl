@@ -3,6 +3,7 @@
 set -eu
 
 install_flatpaks() {
+  echo "Installing flatpaks"
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
   local flatpaks=(
@@ -14,6 +15,7 @@ install_flatpaks() {
 }
 
 install_ostree() {
+  echo "Installing ostree packages"
   # setting up non-rh repos
   # https://code.visualstudio.com/docs/setup/linux#_rhel-fedora-and-centos-based-distributions
   if [ ! -f /etc/pki/rpm-gpg/microsoft.asc ]; then
@@ -24,34 +26,48 @@ install_ostree() {
   fi
   
   rpm-ostree install --idempotent -y \
+    python3-pip \
+    pipx \
     binutils \
     podman-docker \
     zsh \
     ddccontrol ddccontrol-gtk \
     vim \
     wl-clipboard \
-    code 
-  sudo rpm-ostree apply-live
+    code
+  echo "Applying ostree changes (best effort)"
+  sudo rpm-ostree apply-live || true
 }
 
 setup_toolbx() {
+  echo "Setting up toolbox"
   if ! toolbox list -c | grep -q "ubuntu-toolbox-23.10"; then
     toolbox create --distro ubuntu --release 23.10
   fi
 }
 
 {{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
+echo "Installing Kinoite environment"
 install_ostree
 install_flatpaks
 setup_toolbx
 
 if [ ! -f ~/bin/git-credential-github ]; then
+  echo "Downloading git-credential-github"
   # Download and extract git-credential-github
   mkdir -p /tmp/git-credential-github
   curl -L https://github.com/Xgames123/git-credential-github/releases/download/2.2.0/git-credential-github-2.2.0.deb -o /tmp/git-credential-github/git-credential-github-2.2.0.deb
   ar x /tmp/git-credential-github/git-credential-github-2.2.0.deb --output /tmp/git-credential-github
   tar -xf /tmp/git-credential-github/data.tar.xz -C /tmp/git-credential-github
   cp /tmp/git-credential-github/usr/bin/git-credential-github ~/bin/
+fi
+
+if ! command -v topgrade &> /dev/null; then
+  echo "Downloading topgrade"
+  mkdir -p /tmp/topgrade
+  curl -L https://github.com/topgrade-rs/topgrade/releases/download/v14.0.1/topgrade-v14.0.1-x86_64-unknown-linux-musl.tar.gz -o /tmp/topgrade/topgrade.tar.gz
+  tar -xf /tmp/topgrade/topgrade.tar.gz -C /tmp/topgrade
+  cp /tmp/topgrade/topgrade ~/bin/
 fi
 
 {{ end -}}
