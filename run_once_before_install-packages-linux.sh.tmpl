@@ -1,0 +1,59 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/bash
+set -eu
+
+install_flatpaks() {
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+  local flatpaks=(
+{{ joinPath .chezmoi.sourceDir "Pakfile" | include }}
+{{ joinPath .chezmoi.sourceDir "Pakfile.pers.asc" | include | decrypt }}
+  )
+
+  flatpak install -y flathub "${flatpaks[@]}"
+}
+
+install_ostree() {
+  # setting up non-rh repos
+  # https://code.visualstudio.com/docs/setup/linux#_rhel-fedora-and-centos-based-distributions
+  if [ ! -f /etc/pki/rpm-gpg/microsoft.asc ]; then
+    curl -o /etc/pki/rpm-gpg/microsoft.asc https://packages.microsoft.com/keys/microsoft.asc
+  fi
+  if [ ! -f /etc/yum.repos.d/vscode.repo ]; then
+    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+  fi
+  
+  rpm-ostree install --idempotent -y \
+    binutils \
+    podman-docker \
+    zsh \
+    ddccontrol ddccontrol-gtk \
+    vim \
+    wl-clipboard \
+    code 
+  sudo rpm-ostree apply-live
+}
+
+setup_toolbx() {
+  if ! toolbox list -c | grep -q "ubuntu-toolbox-23.10"; then
+    toolbox create --distro ubuntu --release 23.10
+  fi
+}
+
+{{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
+install_ostree
+install_flatpaks
+setup_toolbx
+
+if [ ! -f ~/bin/git-credential-github ]; then
+  # Download and extract git-credential-github
+  mkdir -p /tmp/git-credential-github
+  curl -L https://github.com/Xgames123/git-credential-github/releases/download/2.2.0/git-credential-github-2.2.0.deb -o /tmp/git-credential-github/git-credential-github-2.2.0.deb
+  ar x /tmp/git-credential-github/git-credential-github-2.2.0.deb --output /tmp/git-credential-github
+  tar -xf /tmp/git-credential-github/data.tar.xz -C /tmp/git-credential-github
+  cp /tmp/git-credential-github/usr/bin/git-credential-github ~/bin/
+fi
+
+{{ end -}}
+
+{{ end -}}

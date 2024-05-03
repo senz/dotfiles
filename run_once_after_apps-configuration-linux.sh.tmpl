@@ -1,0 +1,21 @@
+{{ if (eq .chezmoi.os "linux") -}}
+#!/bin/bash
+
+# Check if Oh My Zsh is installed
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    # Install Oh My Zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# switching shell for current user
+current_shell=$(getent passwd $LOGNAME | cut -d: -f7)
+if [[ "$current_shell" != "/bin/zsh" ]]; then 
+    chsh -s $(which zsh) 
+fi
+
+# ---------------------------------------------------------------------------------------------------------------------
+# GPG settings
+# ---------------------------------------------------------------------------------------------------------------------
+gpg-connect-agent reloadagent /bye
+
+{{ end -}}
