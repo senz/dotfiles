@@ -26,15 +26,16 @@ install_ostree() {
   fi
   
   rpm-ostree install --idempotent -y \
-    python3-pip \
-    pipx \
     binutils \
-    podman-docker \
-    zsh \
+    code \
     ddccontrol ddccontrol-gtk \
+    pipx \
+    podman-docker \
+    python3-pip \
+    snapper \
     vim \
     wl-clipboard \
-    code
+    zsh
   echo "Applying ostree changes (best effort)"
   sudo rpm-ostree apply-live || true
 }
