@@ -25,15 +25,19 @@
 [commit]
 	gpgsign = true
 [credential]
-{{- if (eq .chezmoi.os "darwin") }}
+{{- if or (eq .chezmoi.os "darwin") (not (env "REMOTE_CONTAINERS" | empty)) }}
 	helper = /usr/local/share/gcm-core/git-credential-manager
 {{ end -}}
 {{- if (eq .chezmoi.os "linux") }}
 	credentialStore = secretservice
 [credential "https://github.com"]
-  helper = cache
-  helper = github # important that you put it last because we only need to run gcg when other helpers have failed to give credentials
-  username = {{ .ghlogin }}
+	helper = cache
+	helper = github # important that you put it last because we only need to run gcg when other helpers have failed to give credentials
+	username = {{ .ghlogin }}
+[credential "https://gist.github.com"]
+	helper = cache
+	helper = github
+	username = {{ .ghlogin }}
 {{ end -}}
 [credential "https://dev.azure.com"]
 	useHttpPath = true
