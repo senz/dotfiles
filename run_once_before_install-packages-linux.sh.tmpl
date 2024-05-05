@@ -2,6 +2,10 @@
 #!/bin/bash
 set -eu
 
+RPMS=(
+  "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
+)
+
 install_flatpaks() {
   echo "Installing flatpaks"
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -29,6 +33,8 @@ install_ostree() {
     binutils \
     code \
     ddccontrol ddccontrol-gtk \
+    ffmpeg-free \
+    gh \
     pipx \
     podman-docker \
     python3-pip \
@@ -36,6 +42,25 @@ install_ostree() {
     vim \
     wl-clipboard \
     zsh
+
+  if ! rpm-ostree status | grep -q "appimagelauncher"; then
+    mkdir -p $HOME/.cache/chezmoi/rpms
+    # download from RPMS to cache folder if not exists
+    for rpm in "${RPMS[@]}"; do
+      if [ ! -f $HOME/.cache/chezmoi/rpms/$(basename $rpm) ]; then
+        curl -L $rpm -o $HOME/.cache/chezmoi/rpms/$(basename $rpm)
+      fi
+    done
+
+    rpms_files=""
+    for rpm in "${RPMS[@]}"; do
+      rpms_files="$rpms_files $HOME/.cache/chezmoi/rpms/$(basename $rpm)"
+    done
+
+    rpm-ostree install --idempotent -y \
+      $rpms_files
+  fi
+
   echo "Applying ostree changes (best effort)"
   sudo rpm-ostree apply-live || true
 }
