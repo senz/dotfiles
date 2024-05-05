@@ -1,8 +1,9 @@
-com.bktus.gpgfrontend
 com.brave.Browser
 com.core447.StreamController
-com.transmissionbt.Transmission
-io.github.spacingbat3.webcord
+com.obsproject.Studio
 io.github.tdesktop_x64.TDesktop
+org.kde.kleopatra
+org.qbittorrent.qBittorrent
 org.videolan.VLC
 org.wezfurlong.wezterm
+xyz.armcord.ArmCord
