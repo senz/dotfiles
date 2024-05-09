@@ -4,9 +4,9 @@ set -eu
 
 RPMS=(
   "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
-  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-  "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"
+  # "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+  # "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+  # "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"
 )
 
 install_flatpaks() {
@@ -31,8 +31,9 @@ install_ostree() {
   if [ ! -f /etc/yum.repos.d/vscode.repo ]; then
     echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
   fi
-  
+
   rpm-ostree install --idempotent -y \
+    {{- joinPath .chezmoi.sourceDir "Rpmfile.pers.asc" | include | decrypt -}}
     binutils \
     code \
     ddccontrol ddccontrol-gtk \
@@ -46,11 +47,10 @@ install_ostree() {
     syncthing \
     vim \
     wl-clipboard \
-    xclip \
     zsh
 
   # TODO: check if packages are already installed
-  if rpm-ostree status; then
+  if rpm-ostree status -bq; then
     mkdir -p $HOME/.cache/chezmoi/rpms
     # download from RPMS to cache folder if not exists
     for rpm in "${RPMS[@]}"; do
