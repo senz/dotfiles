@@ -117,6 +117,8 @@ setopt HIST_IGNORE_SPACE
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias zhistory_paste='echo : `expr $(date +%s) + 1`:0\;`printf "$(xclip -o clipboard)\n"` >> ~/.zsh_history && fc -R'
+
 autoload -U +X bashcompinit && bashcompinit
 
 export LC_ALL=en_US.UTF-8

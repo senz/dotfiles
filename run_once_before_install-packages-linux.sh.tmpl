@@ -4,6 +4,9 @@ set -eu
 
 RPMS=(
   "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
+  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+  "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"
 )
 
 install_flatpaks() {
@@ -39,11 +42,14 @@ install_ostree() {
     podman-docker \
     python3-pip \
     snapper \
+    syncthing \
     vim \
     wl-clipboard \
+    xclip \
     zsh
 
-  if ! rpm-ostree status | grep -q "appimagelauncher"; then
+  # TODO: check if packages are already installed
+  if rpm-ostree status; then
     mkdir -p $HOME/.cache/chezmoi/rpms
     # download from RPMS to cache folder if not exists
     for rpm in "${RPMS[@]}"; do
