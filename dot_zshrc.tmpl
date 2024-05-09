@@ -117,7 +117,9 @@ setopt HIST_IGNORE_SPACE
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias zhistory_paste='echo : `expr $(date +%s) + 1`:0\;`printf "$(xclip -o clipboard)\n"` >> ~/.zsh_history && fc -R'
+{{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
+alias zhistory_paste='echo : `expr $(date +%s) + 1`:0\;`printf "$(wl-paste -pn)\n"` >> ~/.zsh_history && fc -R'
+{{ end -}}
 
 autoload -U +X bashcompinit && bashcompinit
 
