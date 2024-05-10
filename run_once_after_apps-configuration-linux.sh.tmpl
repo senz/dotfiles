@@ -20,4 +20,15 @@ fi
 # ---------------------------------------------------------------------------------------------------------------------
 gpg-connect-agent reloadagent /bye
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Etckeeper settings
+# ---------------------------------------------------------------------------------------------------------------------
+# check if /etc/.git exists and /etc/etckeeper exists and etckeeper is installed
+if [ ! -d "/etc/.git" ] && [ ! -d "/etc/etckeeper" ] && command -v etckeeper &> /dev/null; then
+    echo "Initializing etckeeper"
+    sudo etckeeper init
+    echo "Initial commit"
+    sudo etckeeper commit "Initial commit"
+fi
+
 {{ end -}}
