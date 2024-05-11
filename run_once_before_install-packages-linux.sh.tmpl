@@ -21,6 +21,25 @@ install_flatpaks() {
   flatpak install -y flathub "${flatpaks[@]}"
 }
 
+remove_flatpaks() {
+  echo "Removing flatpaks"
+  local flatpaks=(
+    org.kde.okular
+    org.kde.kmahjongg
+    org.kde.kmines
+    org.kde.kolourpaint
+    org.kde.krdc
+  )
+
+  local flatpaks_list="$(flatpak list --columns=application)"
+  for flatpak in "${flatpaks[@]}"; do
+    if echo "$flatpaks_list" | grep -q "$flatpak"; then
+      flatpak uninstall --delete-data -y "${flatpaks[@]}"
+      break
+    fi
+  done 
+}
+
 install_ostree() {
   echo "Installing ostree packages"
   # setting up non-rh repos
@@ -69,6 +88,14 @@ install_ostree() {
       $rpms_files
   fi
 
+  if command -v kdeconnect-cli &> /dev/null; then
+    echo "Removing kde-connect packages"
+    rpm-ostree override remove \
+      kde-connect \
+      kde-connect-libs \
+      kdeconnectd
+  fi
+
   echo "Applying ostree changes (best effort)"
   sudo rpm-ostree apply-live || true
 }
@@ -78,11 +105,15 @@ setup_toolbx() {
   if ! toolbox list -c | grep -q "ubuntu-toolbox-23.10"; then
     toolbox create --distro ubuntu --release 23.10
   fi
+  if ! toolbox list -c | grep -q "fedora-toolbox-40"; then
+    toolbox create --distro fedora --release 40
+  fi
 }
 
 {{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
 echo "Installing Kinoite environment"
 install_ostree
+remove_flatpaks
 install_flatpaks
 setup_toolbx
 
