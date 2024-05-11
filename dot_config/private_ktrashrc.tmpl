@@ -1,6 +1,8 @@
-[/home/senz/.local/share/Trash]
+{{ if (eq .chezmoi.os "linux") -}}
+[/home/{{ .chezmoi.username }}/.local/share/Trash]
 Days=7
 LimitReachedAction=0
 Percent=10
 UseSizeLimit=true
 UseTimeLimit=true
+{{ end -}}
