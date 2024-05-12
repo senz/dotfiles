@@ -56,9 +56,10 @@ chezmoi purge
 ## Manual checklist
 
 - [ ] Setup gpg and gpg-agent
-- [ ] Import gpg keys
+- [ ] Import gpg key stubs
 - [ ] Authorize syncthing
 - [ ] Sync Brave settings/extensions...
+- [ ] Install CA
 
 ## TODO
 
