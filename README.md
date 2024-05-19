@@ -55,16 +55,25 @@ chezmoi purge
 ```
 ## Manual checklist
 
-- [ ] Setup gpg and gpg-agent
 - [ ] Import gpg key stubs
 - [ ] Authorize syncthing
 - [ ] Sync Brave settings/extensions...
-- [ ] Install CA
+- [ ] Install CA from `certs/`
+- [ ] Install VSCode [Sync Settings](https://marketplace.visualstudio.com/items?itemName=zokugun.sync-settings) extension and `pull`
 
-## TODO
+<details>
+    <summary>Sync settings.yml</summary>
 
-- [ ] Setup gpg and gpg-agent in `before` script
-- [ ] Impoprt gpg keys from the vault
+```yaml
+hostname: "dnbfw"
+profile: personal
+
+repository:
+  type: git
+  url: https://github.com/senz/vscode-settings.git
+  branch: main
+```
+</details>
 
 ## References and inspiration
 
