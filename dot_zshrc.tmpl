@@ -132,7 +132,9 @@ if command -v alacritty &>/dev/null; then
   export TERM=alacritty
 fi
 
-eval "$(register-python-argcomplete pipx)"
+if command -v register-python-argcomplete &>/dev/null; then
+  eval "$(register-python-argcomplete pipx)"
+fi
 
 export GPG_TTY=$(tty)
 gpg-connect-agent -q updatestartuptty /bye >/dev/null
