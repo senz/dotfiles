@@ -112,6 +112,17 @@ setup_toolbx() {
   fi
 }
 
+install_fonts() {
+  echo "Installing fonts"
+  mkdir -p $HOME/.local/share/fonts
+
+  local fonts=(
+    {{- joinPath .chezmoi.sourceDir "fonts" | include -}}
+  )
+
+  fc-cache -v $HOME/.local/share/fonts
+}
+
 {{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
 echo "Installing Kinoite environment"
 install_ostree
