@@ -11,7 +11,7 @@ fi
 
 # switching shell for current user
 current_shell=$(getent passwd $LOGNAME | cut -d: -f7)
-if [[ "$current_shell" != "/bin/zsh" ]]; then 
+if [[ "$current_shell" != "/usr/bin/zsh" ]]; then 
     chsh -s $(which zsh) 
 fi
 
@@ -29,6 +29,44 @@ if [ ! -d "/etc/.git" ] && [ ! -d "/etc/etckeeper" ] && command -v etckeeper &> 
     sudo etckeeper init
     echo "Initial commit"
     sudo etckeeper commit "Initial commit"
+fi
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Podman settings
+# ---------------------------------------------------------------------------------------------------------------------
+# Backwards compatibility with docker
+# Starting rootless podman service
+ENABLE_PODMAN_SOCKET=false
+if command -v podman &> /dev/null; then
+    # check if podman service is running
+    if [[ "$ENABLE_PODMAN_SOCKET" == "true" ]]; then
+        if ! systemctl --user is-active --quiet podman.socket; then
+            echo "Starting podman.socket"
+            systemctl --user enable --now podman.socket
+            systemctl --user start podman
+        fi
+    fi
+fi
+
+# ---------------------------------------------------------------------------------------------------------------------
+# chezmoi completion
+# ---------------------------------------------------------------------------------------------------------------------
+if command -v chezmoi &> /dev/null; then
+    mkdir -p "${HOME}/.oh-my-zsh/completions"
+    chezmoi completion zsh > "${HOME}/.oh-my-zsh/completions/_chezmoi"
+fi
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Docker settings
+# ---------------------------------------------------------------------------------------------------------------------
+# check if docker is installed
+if command -v docker &> /dev/null; then
+    # check if user is in docker group
+    if ! groups | grep -q "\bdocker\b"; then
+        echo "Adding user to docker group"
+        # https://docs.fedoraproject.org/en-US/fedora-silverblue/troubleshooting/#_unable_to_add_user_to_group
+        sudo sh -c "grep -E '^docker:' /usr/lib/group | tee -a /etc/group > /dev/null && usermod -aG docker $USER"
+    fi
 fi
 
 {{ end -}}

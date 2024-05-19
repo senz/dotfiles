@@ -5,3 +5,5 @@ README.md
 install.sh
 Pakfile*
 Rpmfile*
+certs/
+yum.repos.d/

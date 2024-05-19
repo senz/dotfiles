@@ -58,7 +58,7 @@ chezmoi purge
 - [ ] Import gpg key stubs
 - [ ] Authorize syncthing
 - [ ] Sync Brave settings/extensions...
-- [ ] Install CA from `certs/`
+- [ ] Install CA
 - [ ] Install VSCode [Sync Settings](https://marketplace.visualstudio.com/items?itemName=zokugun.sync-settings) extension and `download`
 
 <details>

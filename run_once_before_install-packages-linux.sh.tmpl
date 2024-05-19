@@ -10,6 +10,25 @@ RPMS=(
   # "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"
 )
 
+NERD_FONT_VERSION=3.2.1
+
+NERD_FONT_FAMILIES=(
+  "FiraCode"
+  "FiraMono"
+  "Hack"
+  "Hasklig"
+  "JetBrainsMono"
+  "Monoid"
+  "RobotoMono"
+  "SpaceMono"
+)
+NERD_FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/"
+
+USER_FONT_DIR="$HOME/.local/share/fonts"
+
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf $TMP_DIR' EXIT
+
 install_flatpaks() {
   echo "Installing flatpaks"
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -43,33 +62,19 @@ remove_flatpaks() {
 
 install_ostree() {
   echo "Installing ostree packages"
+  local rpmfile=(
+    {{ joinPath .chezmoi.sourceDir "Rpmfile.pers.asc" | include | decrypt -}}
+    {{- joinPath .chezmoi.sourceDir "Rpmfile" | include -}}
+  )
   # setting up non-rh repos
+  for repo in $(ls {{ .chezmoi.sourceDir }}/yum.repos.d); do
+    sudo cp "{{ .chezmoi.sourceDir }}/yum.repos.d/$repo" /etc/yum.repos.d/
+  done
+
   # https://code.visualstudio.com/docs/setup/linux#_rhel-fedora-and-centos-based-distributions
   if [ ! -f /etc/pki/rpm-gpg/microsoft.asc ]; then
     curl -o /etc/pki/rpm-gpg/microsoft.asc https://packages.microsoft.com/keys/microsoft.asc
   fi
-  if [ ! -f /etc/yum.repos.d/vscode.repo ]; then
-    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-  fi
-
-  rpm-ostree install --idempotent -y \
-    {{- joinPath .chezmoi.sourceDir "Rpmfile.pers.asc" | include | decrypt -}}
-    binutils \
-    code \
-    ddccontrol ddccontrol-gtk \
-    etckeeper \
-    ffmpeg-free \
-    gh \
-    pipx \
-    podman-compose \
-    podman-docker \
-    python3-pip \
-    snapper \
-    syncthing \
-    tealdeer \
-    vim \
-    wl-clipboard \
-    zsh
 
   # TODO: check if packages are already installed
   if rpm-ostree status -bq; then
@@ -81,13 +86,14 @@ install_ostree() {
       fi
     done
 
-    rpms_files=""
+    # assemble all rpms plus the downloaded ones
+    rpms_files="${rpmfile[@]}"
     for rpm in "${RPMS[@]}"; do
       rpms_files="$rpms_files $HOME/.cache/chezmoi/rpms/$(basename $rpm)"
     done
+    echo "Installing ostree packages: $rpms_files"
 
-    rpm-ostree install --idempotent -y \
-      $rpms_files
+    rpm-ostree install --allow-inactive --idempotent -y $rpms_files
   fi
 
   if command -v kdeconnect-cli &> /dev/null; then
@@ -112,15 +118,37 @@ setup_toolbx() {
   fi
 }
 
+install_nerd_fonts() {
+  echo "Installing Nerd Fonts"
+  local nerd_fonts_dir="$USER_FONT_DIR/NerdFonts"
+  mkdir -p $nerd_fonts_dir
+  echo "Installing Nerd Fonts: ${NERD_FONT_FAMILIES[@]}"
+  for family in "${NERD_FONT_FAMILIES[@]}"; do
+    if [ -f $nerd_fonts_dir/$family ]; then
+      echo "Nerd Font $family already exists, skipping"
+      continue
+    fi
+    curl -L -o $TMP_DIR/$family.tar.xz $NERD_FONT_URL/v$NERD_FONT_VERSION/$family.tar.xz
+    mkdir -p $nerd_fonts_dir/$family
+    tar -xvf $TMP_DIR/$family.tar.xz -C $nerd_fonts_dir/$family
+  done
+}
+
 install_fonts() {
-  echo "Installing fonts"
-  mkdir -p $HOME/.local/share/fonts
+  install_nerd_fonts
+  echo "Updating fonts cache"
+  fc-cache -v $HOME/.local/share/fonts || true
+}
 
-  local fonts=(
-    {{- joinPath .chezmoi.sourceDir "fonts" | include -}}
-  )
+install_ca() {
+  echo "Installing CA certificates"
+  # if home/.step exists, skip
+  if [ -d $HOME/.step ]; then
+    echo ".step exists, skipping CA bootstrap"
+    return
+  fi
 
-  fc-cache -v $HOME/.local/share/fonts
+  step ca bootstrap --ca-url {{ .caUrl }} --fingerprint {{ .caUrlFingerprint }} --install
 }
 
 {{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
@@ -129,6 +157,8 @@ install_ostree
 remove_flatpaks
 install_flatpaks
 setup_toolbx
+install_ca
+install_fonts
 
 if [ ! -f ~/bin/git-credential-github ]; then
   echo "Downloading git-credential-github"
