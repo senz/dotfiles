@@ -65,8 +65,8 @@ chezmoi purge
     <summary>Sync settings.yml</summary>
 
 ```yaml
-hostname: "dnbfw"
-profile: personal
+hostname: "<hostname>"
+profile: <chosen profile>
 
 repository:
   type: git
@@ -75,6 +75,20 @@ repository:
 ```
 </details>
 
+## Declarative package management
+
+I have 'invented' several package spec files in order to manage packages in a declarative way.
+I only support 'additive' package management, meaning that I only add packages, never remove them. This is generally non error-prone, and I can always remove packages manually. There is certain risk of
+having packages installed and not added to the spec file. This is a tradeoff I am willing to take.
+
+Files suffixed with `.pers.asc` are encrypted protions of main files. They are decrypted and merged into the main file during chezmoi apply.
+
+### Package spec files
+
+- Pakfile – flatpak packages
+- Rpmfile – rpm packages used in Fedora, and specifically in ostree package layering
+- Appfile – appimage packages
+
 ## References and inspiration
 
 - [zero-sh](https://github.com/zero-sh/zero.sh/) – I started with this, liked its simplicity, but quickly hit its limitations.
@@ -82,7 +96,7 @@ repository:
     - no encryption support
     - multiple workspaces and inheritance creates confusion
     - MacOS specific
-- [Unofficial guide to dotfiles on GitHub](https://dotfiles.github.io/). Look into [utilities section](https://dotfiles.github.io/utilities/)
+- [Unofficial guide to dotfiles on GitHub](https://dotfiles.github.io/). Look into [utilities section](https://dotfiles.github.io/utilities/) as well as [inspirations](https://dotfiles.github.io/inspiration/)
 - [chezmoi](https://chezmoi.io/) – Im currently using this. It's more complex, because of heavy reliance on templating (like helm for configs), but have everything I need. Its well maintened, and you dont have to use templates if you dont want to.
 
 ### dotfiles inspirations
