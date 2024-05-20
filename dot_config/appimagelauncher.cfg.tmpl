@@ -1,9 +1,11 @@
+{{ if (eq .chezmoi.os "linux") -}}
 [AppImageLauncher]
 ask_to_move = true
-# destination = ~/Applications
+destination = ~/Applications
 enable_daemon = true
 
 
 [appimagelauncherd]
 # additional_directories_to_watch = ~/otherApplications:/even/more/applications
 # monitor_mounted_filesystems = false
+{{ end -}}
