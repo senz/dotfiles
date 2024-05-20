@@ -2,16 +2,8 @@
 #!/bin/bash
 set -eu
 
-RPMS=(
-  "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
-  "https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli_amd64.rpm"
-  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-  # "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"
-)
-
+### Settings and versions
 NERD_FONT_VERSION=3.2.1
-
 NERD_FONT_FAMILIES=(
   "FiraCode"
   "FiraMono"
@@ -26,9 +18,18 @@ NERD_FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/"
 
 USER_FONT_DIR="$HOME/.local/share/fonts"
 
+TOPGRADE_VERSION=14.0.1
+GITHUB_CREDENTIAL_VERSION=2.2.0
+
+# TODO move to chezmoi data
+APPIMAGE_DIR="$HOME/Applications"
+
+### -------------------
+
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf $TMP_DIR' EXIT
 
+## Flatpak installation. Handles Pakfile
 install_flatpaks() {
   echo "Installing flatpaks"
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -41,8 +42,10 @@ install_flatpaks() {
   flatpak install -y flathub "${flatpaks[@]}"
 }
 
+## Cleaning preinstalled flatpaks (Kinoite)
 remove_flatpaks() {
   echo "Removing flatpaks"
+  # preinstalled Kinoite flatpaks I don't use
   local flatpaks=(
     org.kde.okular
     org.kde.kmahjongg
@@ -60,37 +63,54 @@ remove_flatpaks() {
   done 
 }
 
+## AppImage installation. Handles Appfile
+install_appimages() {
+  echo "Installing AppImages"
+  local appimages=(
+    {{ joinPath .chezmoi.sourceDir "Appfile" | include }}
+  )
+
+  for appimage in "${appimages[@]}"; do
+    if [ -f $APPIMAGE_DIR/$(basename $appimage) ]; then
+      continue
+    fi
+    echo "Downloading $appimage"
+    curl -L $appimage -o $APPIMAGE_DIR/$(basename $appimage)
+  done
+}
+
+## RPM ostree layering. Handles Rpmfile and yum.repos.d
 install_ostree() {
   echo "Installing ostree packages"
   local rpmfile=(
     {{ joinPath .chezmoi.sourceDir "Rpmfile.pers.asc" | include | decrypt -}}
     {{- joinPath .chezmoi.sourceDir "Rpmfile" | include -}}
   )
+
   # setting up non-rh repos
+  echo "Setting up yum repos"
   for repo in $(ls {{ .chezmoi.sourceDir }}/yum.repos.d); do
+    if [ -f /etc/yum.repos.d/$repo ]; then
+      continue
+    fi
+    echo "Copying $repo to /etc/yum.repos.d"
     sudo cp "{{ .chezmoi.sourceDir }}/yum.repos.d/$repo" /etc/yum.repos.d/
   done
 
-  # https://code.visualstudio.com/docs/setup/linux#_rhel-fedora-and-centos-based-distributions
-  if [ ! -f /etc/pki/rpm-gpg/microsoft.asc ]; then
-    curl -o /etc/pki/rpm-gpg/microsoft.asc https://packages.microsoft.com/keys/microsoft.asc
-  fi
-
   # TODO: check if packages are already installed
+  # thats non-trivial because of the ostree nature. You have booted deployment
+  # and you could have pending deployments. So you can't just check the current
+  # rpm-ostree status provides json output, but it's not easy to parse. Its solvable though
+  # logic should be as following:
+  # - check if there are pending deployments
+  # - if there are, check if the packages are already installed
+  # - if not, install them
+  # - if there are no pending deployments, check if the packages are installed in boot deployment
+  # probably we should handle only additive changes, since blind chezmoi apply could silently remove packages
+  # installed by the user but not versioned in chezmoi
   if rpm-ostree status -bq; then
-    mkdir -p $HOME/.cache/chezmoi/rpms
-    # download from RPMS to cache folder if not exists
-    for rpm in "${RPMS[@]}"; do
-      if [ ! -f $HOME/.cache/chezmoi/rpms/$(basename $rpm) ]; then
-        curl -L $rpm -o $HOME/.cache/chezmoi/rpms/$(basename $rpm)
-      fi
-    done
-
     # assemble all rpms plus the downloaded ones
     rpms_files="${rpmfile[@]}"
-    for rpm in "${RPMS[@]}"; do
-      rpms_files="$rpms_files $HOME/.cache/chezmoi/rpms/$(basename $rpm)"
-    done
     echo "Installing ostree packages: $rpms_files"
 
     rpm-ostree install --allow-inactive --idempotent -y $rpms_files
@@ -108,6 +128,8 @@ install_ostree() {
   sudo rpm-ostree apply-live || true
 }
 
+## Toolbox setup. Just containers creation
+## TODO: deprecated in favor of distrobox
 setup_toolbx() {
   echo "Setting up toolbox"
   if ! toolbox list -c | grep -q "ubuntu-toolbox-23.10"; then
@@ -134,15 +156,17 @@ install_nerd_fonts() {
   done
 }
 
+## Fonts installation. 
+## Only for Linux. Brewfile handles macos fonts
 install_fonts() {
   install_nerd_fonts
   echo "Updating fonts cache"
   fc-cache -v $HOME/.local/share/fonts || true
 }
 
+## CA certificates installation using step
 install_ca() {
   echo "Installing CA certificates"
-  # if home/.step exists, skip
   if [ -d $HOME/.step ]; then
     echo ".step exists, skipping CA bootstrap"
     return
@@ -151,33 +175,49 @@ install_ca() {
   step ca bootstrap --ca-url {{ .caUrl }} --fingerprint {{ .caUrlFingerprint }} --install
 }
 
+## Topgrade installation
+install_topgrade() {
+  if ! command -v topgrade &> /dev/null; then
+    echo "Downloading topgrade"
+    mkdir -p /tmp/topgrade
+    curl -L https://github.com/topgrade-rs/topgrade/releases/download/v$TOPGRADE_VERSION/topgrade-v$TOPGRADE_VERSION-x86_64-unknown-linux-musl.tar.gz -o /tmp/topgrade/topgrade.tar.gz
+    tar -xf /tmp/topgrade/topgrade.tar.gz -C /tmp/topgrade
+    cp /tmp/topgrade/topgrade ~/bin/
+  fi
+}
+
+install_git_credential_github() {
+  if [ ! -f ~/bin/git-credential-github ]; then
+    echo "Downloading git-credential-github"
+    # Download and extract git-credential-github
+    # TODO use TMP_DIR
+    mkdir -p /tmp/git-credential-github
+    curl -L https://github.com/Xgames123/git-credential-github/releases/download/$GITHUB_CREDENTIAL_VERSION/git-credential-github-$GITHUB_CREDENTIAL_VERSION.deb -o /tmp/git-credential-github/git-credential-github.deb
+    ar x /tmp/git-credential-github/git-credential-github.deb --output /tmp/git-credential-github
+    tar -xf /tmp/git-credential-github/data.tar.xz -C /tmp/git-credential-github
+    cp /tmp/git-credential-github/usr/bin/git-credential-github ~/bin/
+    trap 'rm -rf /tmp/git-credential-github' EXIT
+  fi
+}
+
+# ask for sudo password to cache it early in case we need it later
+# not a gurantee, but saves time in some cases
+sudo echo "Caching sudo password"
+
 {{ if (eq .chezmoi.osRelease.variantID "kinoite") -}}
+## Kinoite specific setup
 echo "Installing Kinoite environment"
 install_ostree
 remove_flatpaks
 install_flatpaks
+install_appimages
 setup_toolbx
 install_ca
 install_fonts
+install_topgrade
+install_git_credential_github
 
-if [ ! -f ~/bin/git-credential-github ]; then
-  echo "Downloading git-credential-github"
-  # Download and extract git-credential-github
-  mkdir -p /tmp/git-credential-github
-  curl -L https://github.com/Xgames123/git-credential-github/releases/download/2.2.0/git-credential-github-2.2.0.deb -o /tmp/git-credential-github/git-credential-github-2.2.0.deb
-  ar x /tmp/git-credential-github/git-credential-github-2.2.0.deb --output /tmp/git-credential-github
-  tar -xf /tmp/git-credential-github/data.tar.xz -C /tmp/git-credential-github
-  cp /tmp/git-credential-github/usr/bin/git-credential-github ~/bin/
-fi
-
-if ! command -v topgrade &> /dev/null; then
-  echo "Downloading topgrade"
-  mkdir -p /tmp/topgrade
-  curl -L https://github.com/topgrade-rs/topgrade/releases/download/v14.0.1/topgrade-v14.0.1-x86_64-unknown-linux-musl.tar.gz -o /tmp/topgrade/topgrade.tar.gz
-  tar -xf /tmp/topgrade/topgrade.tar.gz -C /tmp/topgrade
-  cp /tmp/topgrade/topgrade ~/bin/
-fi
-
+## End of Kinoite specific setup
 {{ end -}}
 
 {{ end -}}

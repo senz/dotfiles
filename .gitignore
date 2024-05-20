@@ -4,5 +4,4 @@ Brewfile.lock.json
 # bin file
 chezmoi
 .devcontainer/devcontainer-lock.json
-Pakfile.pers
-Rpmfile.pers
+*.pers
