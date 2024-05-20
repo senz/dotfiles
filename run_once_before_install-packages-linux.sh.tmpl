@@ -63,9 +63,25 @@ remove_flatpaks() {
   done 
 }
 
+## Installing experimental appimaged in go
+## daemon itself is an appimage, but right now its CI build, so we need to track latest
+## like it says in the README https://github.com/probonopd/go-appimage/blob/master/src/appimaged/README.md
+install_appimaged() {
+  # if $APPIMAGE_DIR/appimaged-*.AppImage exists, skip
+  if [ -f $APPIMAGE_DIR/appimaged-*.AppImage ]; then
+    return
+  fi
+  wget -c https://github.com/$(wget -q https://github.com/probonopd/go-appimage/releases/expanded_assets/continuous -O - | grep "appimaged-.*-x86_64.AppImage" | head -n 1 | cut -d '"' -f 2) -P $APPIMAGE_DIR
+  chmod +x $APPIMAGE_DIR/appimaged-*.AppImage
+  echo "launching appimaged for the first time"
+  $APPIMAGE_DIR/appimaged-*.AppImage -q
+}
+
 ## AppImage installation. Handles Appfile
 install_appimages() {
   echo "Installing AppImages"
+  mkdir -p $APPIMAGE_DIR
+  install_appimaged
   local appimages=(
     {{ joinPath .chezmoi.sourceDir "Appfile" | include }}
   )
@@ -76,6 +92,7 @@ install_appimages() {
     fi
     echo "Downloading $appimage"
     curl -L $appimage -o $APPIMAGE_DIR/$(basename $appimage)
+    chmod +x $APPIMAGE_DIR/$(basename $appimage)
   done
 }
 
