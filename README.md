@@ -60,6 +60,7 @@ chezmoi purge
 - [ ] Sync Brave settings/extensions...
 - [ ] Install CA
 - [ ] Install VSCode [Sync Settings](https://marketplace.visualstudio.com/items?itemName=zokugun.sync-settings) extension and `download`
+- [ ] (Linux) [nitropy](https://docs.nitrokey.com/software/nitropy/linux/udev) and [companion](https://github.com/bitfocus/companion/blob/main/assets/linux/50-companion-desktop.rules) udev rules
 
 <details>
     <summary>Sync settings.yml</summary>
