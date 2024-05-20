@@ -87,7 +87,7 @@ Files suffixed with `.pers.asc` are encrypted protions of main files. They are d
 
 - Pakfile – flatpak packages
 - Rpmfile – rpm packages used in Fedora, and specifically in ostree package layering
-- Appfile – appimage packages. System integration is handled with [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher)
+- Appfile – appimage packages
 
 ## TODO
 

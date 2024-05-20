@@ -1,7 +1,0 @@
-{{ if (eq .chezmoi.os "linux") -}}
-[AppImageLauncher]
-ask_to_move=true
-destination=/home/{{ .chezmoi.username }}/Applications
-enable_daemon=true
-
-{{ end -}}
