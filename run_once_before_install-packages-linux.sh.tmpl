@@ -5,8 +5,8 @@ set -eu
 RPMS=(
   "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher-2.2.0-travis995.0f91801.x86_64.rpm"
   "https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli_amd64.rpm"
-  # "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-  # "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
   # "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"
 )
 
@@ -111,10 +111,10 @@ install_ostree() {
 setup_toolbx() {
   echo "Setting up toolbox"
   if ! toolbox list -c | grep -q "ubuntu-toolbox-23.10"; then
-    toolbox create --distro ubuntu --release 23.10
+    toolbox -y create --distro ubuntu --release 23.10
   fi
   if ! toolbox list -c | grep -q "fedora-toolbox-40"; then
-    toolbox create --distro fedora --release 40
+    toolbox -y create --distro fedora --release 40
   fi
 }
 
@@ -124,7 +124,7 @@ install_nerd_fonts() {
   mkdir -p $nerd_fonts_dir
   echo "Installing Nerd Fonts: ${NERD_FONT_FAMILIES[@]}"
   for family in "${NERD_FONT_FAMILIES[@]}"; do
-    if [ -f $nerd_fonts_dir/$family ]; then
+    if [ -d $nerd_fonts_dir/$family ]; then
       echo "Nerd Font $family already exists, skipping"
       continue
     fi

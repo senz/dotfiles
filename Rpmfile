@@ -3,6 +3,7 @@ code
 containerd.io
 ddccontrol
 ddccontrol-gtk
+displaylink
 distrobox
 docker-buildx-plugin
 docker-ce
@@ -10,6 +11,7 @@ docker-ce-cli
 docker-compose-plugin
 etckeeper
 ffmpeg-free
+framework-laptop-kmod-common
 gh
 pipx
 podman-compose
@@ -17,6 +19,7 @@ python3-pip
 snapper
 syncthing
 tealdeer
+v4l2loopback
 vim
 wl-clipboard
 zsh
