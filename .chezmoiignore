@@ -8,3 +8,4 @@ Rpmfile*
 Appfile*
 certs/
 yum.repos.d/
+btrbk/
