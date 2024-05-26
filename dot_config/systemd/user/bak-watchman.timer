@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer for bak-watchman.service
+
+[Timer]
+OnCalendar=*:0/1
+Persistent=true
+RandomizedDelaySec=300
+Unit=bak-watchman.service
+
+[Install]
+WantedBy=default.target

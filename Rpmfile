@@ -10,7 +10,6 @@ docker-buildx-plugin
 docker-ce
 docker-ce-cli
 docker-compose-plugin
-etckeeper
 ffmpeg-free
 gh
 pipx
