@@ -3,7 +3,7 @@ Description=User service for bak-watchman
 After=network.target
 
 [Service]
-ExecStart=$HOME/bin/bak-watchman
+ExecStart=/home/senz/bin/bak-watchman
 
 [Install]
 WantedBy=default.target

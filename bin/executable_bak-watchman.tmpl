@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+## This script is to be run by cron to check if the latest btrbk snapshot is not older then $LAST_BAK_TIME
+## and if the backup is on the $LOCAL_BAK_MOUNT_POINT and is mounted.
+## Also, if the latest snapshot is not backed up, it will send a notification.
+
+set -euo pipefail
+
+set -x
+X_USER="senz"
+X_USERID="1000"
+LOCAL_BAK_MOUNT_POINT="/mnt/fw1tb"
+LAST_BAK_TIME="- 1 day"
+DAY_ROTATION_TIME="0700"
+
+# check if sudo
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Please run this script as root."
+    exit 1
+fi
+
+notify_error() {
+    sudo -u $X_USER DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$X_USERID/bus notify-send 'Bak watchman' "$1"
+}
+
+# trap exit and check last exit code
+trap 'EXIT_CODE=$?; if [ $EXIT_CODE -ne 0 ]; then notify_error "Script failed with exit code $EXIT_CODE"; fi' EXIT
+
+ERROR_MESSAGE=""
+# check if btrbk latest back is no older then $LAST_BAK_TIME
+# btrbk list latest --format=raw
+# output: format="latest" type='snapshot,backup' source_url='/home' source_host='' source_port='' source_subvolume='/home' snapshot_subvolume='/home/.btrbk_snapshots/home.20240526T1906' snapshot_name='home' status='' target_url='/mnt/fw1tb/.btrbk_snapshots/home.20240526T1906' target_host='' target_port='' target_subvolume='/mnt/fw1tb/.btrbk_snapshots/home.20240526T1906' target_type='send-receive' source_rsh='' target_rsh=''
+# target_url format is $volume.YYYYMMDDTHHMM
+# 20240526T1906
+latest=$(btrbk list latest --format=raw 2>/dev/null | tail -n 1 | grep -oP "snapshot_subvolume='[^']+" | cut -d "'" -f 2 | cut -d "." -f 3)
+no_later_than=$(date -d "$LAST_BAK_TIME" +%Y%m%d$DAY_ROTATION_TIME)
+for d in $latest; do
+    d_parsed=$(date -d "$d" +%Y%m%d%H%M)
+    if [ "$d_parsed" -lt "$no_later_than" ]; then
+        ERROR_MESSAGE+="Latest snapshot is outdated. "
+        break
+    fi
+done
+
+# check if $LOCAL_BAK_MOUNT_POINT is mounted
+if ! mountpoint -q "$LOCAL_BAK_MOUNT_POINT"; then
+    ERROR_MESSAGE+="The backup mount point $LOCAL_BAK_MOUNT_POINT is not mounted. "
+fi
+
+# check if that backup is on the $LOCAL_BAK_MOUNT_POINT
+latest=$(btrbk list latest --format=raw 2> /dev/null | tail -n 1 | grep -oP "target_subvolume='[^']+" | cut -d "'" -f 2 || true)
+# if empty, then no backup was made
+if [ -z "$latest" ]; then
+    ERROR_MESSAGE+="Latest snapshot is not backed up. "
+fi
+
+# send-notify the message
+if [ -n "$ERROR_MESSAGE" ]; then
+    notify_error "$ERROR_MESSAGE"
+fi
