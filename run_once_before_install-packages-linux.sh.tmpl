@@ -24,6 +24,12 @@ GITHUB_CREDENTIAL_VERSION=2.2.0
 # TODO move to chezmoi data
 APPIMAGE_DIR="$HOME/Applications"
 
+YUM_GPG_KEYS=(
+  "https://download.docker.com/linux/fedora/gpg"
+  "https://packages.microsoft.com/keys/microsoft.asc"
+  "https://brave-browser-rpm-release.s3.brave.com/brave-core.asc"
+)
+
 ### -------------------
 
 TMP_DIR=$(mktemp -d)
@@ -114,6 +120,16 @@ install_ostree() {
     sudo cp "{{ .chezmoi.sourceDir }}/yum.repos.d/$repo" /etc/yum.repos.d/
   done
 
+  # setting up gpg keys
+  echo "Setting up gpg keys"
+  for key in "${YUM_GPG_KEYS[@]}"; do
+    if [ -f "/etc/pki/rpm-gpg/$(basename $key)" ]; then
+      continue
+    fi
+    echo "Downloading $key"
+    sudo curl -L $key -o "/etc/pki/rpm-gpg/$(basename $key)"
+  done
+
   # TODO: check if packages are already installed
   # thats non-trivial because of the ostree nature. You have booted deployment
   # and you could have pending deployments. So you can't just check the current
@@ -134,11 +150,13 @@ install_ostree() {
   fi
 
   if command -v kdeconnect-cli &> /dev/null; then
-    echo "Removing kde-connect packages"
+    echo "Removing preinstalled packages"
     rpm-ostree override remove \
       kde-connect \
       kde-connect-libs \
-      kdeconnectd
+      kdeconnectd \
+      firefox \
+      firefox-langpacks
   fi
 
   echo "Applying ostree changes (best effort)"
