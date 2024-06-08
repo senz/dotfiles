@@ -5,7 +5,9 @@ com.github.zocker_160.SyncThingy
 com.obsproject.Studio
 io.github.tdesktop_x64.TDesktop
 org.darktable.Darktable
+org.gnome.Evince
 org.kde.krita
+org.kde.okular
 org.libreoffice.LibreOffice
 org.qbittorrent.qBittorrent
 org.videolan.VLC
