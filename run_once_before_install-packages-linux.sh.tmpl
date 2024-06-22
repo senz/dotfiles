@@ -253,6 +253,23 @@ install_git_credential_github() {
   fi
 }
 
+install_ddcci-plasmoid() {
+  # if pipx ddcci-plasmoid is not installed, install it
+  if ! command -v ddcci-plasmoid-backend &> /dev/null; then
+    echo "Installing ddcci-plasmoid-backend"
+    pipx install ddcci-plasmoid-backend
+  fi
+  # kpackagetool6 -s de.davidhi.ddcci-brightness
+  # if plasmoid is not installed, install it
+  if ! kpackagetool6 --list -t Plasma/Applet | grep -q de.davidhi.ddcci-brightness; then
+    echo "Installing ddcci-brightness plasmoid"
+    git clone https://github.com/davidhi7/ddcci-plasmoid.git $TMP_DIR/ddcci-plasmoid
+    kpackagetool6 -t Plasma/Applet -i $TMP_DIR/ddcci-plasmoid/plasmoid
+    echo Backend executable command must be set to ~/.local/bin/ddcci_plasmoid_backend (without python3 or anything else before).
+  fi
+
+}
+
 # ask for sudo password to cache it early in case we need it later
 # not a gurantee, but saves time in some cases
 sudo echo "Caching sudo password"
@@ -269,6 +286,8 @@ install_ca
 install_fonts
 install_topgrade
 install_git_credential_github
+setup_i2c
+install_ddcci-plasmoid
 
 ## End of Kinoite specific setup
 {{ end -}}
