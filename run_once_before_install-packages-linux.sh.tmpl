@@ -30,6 +30,7 @@ YUM_GPG_KEYS=(
   "https://brave-browser-rpm-release.s3.brave.com/brave-core.asc"
 )
 
+CHEZMOI_SOURCE_DIR="{{ .chezmoi.sourceDir }}"
 ### -------------------
 
 TMP_DIR=$(mktemp -d)
@@ -53,7 +54,6 @@ remove_flatpaks() {
   echo "Removing flatpaks"
   # preinstalled Kinoite flatpaks I don't use
   local flatpaks=(
-    org.kde.okular
     org.kde.kmahjongg
     org.kde.kmines
     org.kde.kolourpaint
@@ -189,6 +189,24 @@ install_nerd_fonts() {
     mkdir -p $nerd_fonts_dir/$family
     tar -xvf $TMP_DIR/$family.tar.xz -C $nerd_fonts_dir/$family
   done
+}
+
+setup_i2c() {
+  # creating i2c group
+  if ! getent group i2c &>/dev/null; then
+    sudo groupadd i2c
+  fi
+  # adding current user to i2c group
+  if ! groups | grep -q i2c; then
+    sudo usermod -aG i2c $USER
+  fi
+
+  # adding udev rule for i2c
+  # /usr/share/ddcutil/data/60-ddcutil-i2c.rules
+  if [ ! -f /etc/udev/rules.d/60-ddcutil-i2c.rules ]; then
+    echo "Adding udev rule for i2c"
+    sudo cp $CHEZMOI_SOURCE_DIR/.udev.rules/60-ddcutil-i2c.rules /etc/udev/rules.d/
+  fi
 }
 
 ## Fonts installation. 
