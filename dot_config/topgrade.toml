@@ -39,19 +39,19 @@
 # display_time = true
 
 # Don't ask for confirmations (no default value)
-# assume_yes = true
+assume_yes = true
 
 # Do not ask to retry failed steps (default: false)
-# no_retry = true
+no_retry = true
 
 # Run inside tmux (default: false)
 # run_in_tmux = true
 
 # Cleanup temporary or old files (default: false)
-# cleanup = true
+cleanup = true
 
 # Send a notification for every step (default: false)
-# notify_each_step = false
+notify_each_step = true
 
 # Skip sending a notification at the end of a run (default: false)
 # skip_notify = true
@@ -104,7 +104,7 @@
 
 [brew]
 # greedy_cask = true
-# autoremove = true
+autoremove = true
 
 
 [linux]
@@ -205,7 +205,7 @@
 
 [firmware]
 # Offer to update firmware; if false just check for and display available updates
-# upgrade = true
+upgrade = false
 
 
 [vagrant]

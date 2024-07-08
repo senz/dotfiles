@@ -31,13 +31,15 @@
 {{- if (eq .chezmoi.os "linux") }}
 	credentialStore = secretservice
 [credential "https://github.com"]
-	helper = cache
-	helper = github # important that you put it last because we only need to run gcg when other helpers have failed to give credentials
 	username = {{ .ghlogin }}
-[credential "https://gist.github.com"]
 	helper = cache
+	helper = !/usr/bin/gh auth git-credential
 	helper = github
+[credential "https://gist.github.com"]
 	username = {{ .ghlogin }}
+	helper = cache
+	helper = !/usr/bin/gh auth git-credential
+	helper = github
 {{ end -}}
 [credential "https://dev.azure.com"]
 	useHttpPath = true
