@@ -21,6 +21,7 @@ tealdeer
 v4l2loopback
 vim
 wl-clipboard
+zerotier-one
 zsh
 "https://dl.smallstep.com/cli/docs-ca-install/latest/step-cli_amd64.rpm"
 "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
