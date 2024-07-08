@@ -63,6 +63,7 @@ chezmoi purge
 - [ ] (Linux) [nitropy](https://docs.nitrokey.com/software/nitropy/linux/udev) and [companion](https://github.com/bitfocus/companion/blob/main/assets/linux/50-companion-desktop.rules) udev rules
 - [ ] (Linux) btrbk systemd timer, config
 - [ ] (Linux) [vial udev rules](https://get.vial.today/manual/linux-udev.html)
+- [ ] (Linux) `sudo systemctl enable zerotier-one.service && sudo systemctl start zerotier-one.service` 
 
 <details>
     <summary>Sync settings.yml</summary>
