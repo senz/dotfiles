@@ -265,7 +265,7 @@ install_ddcci-plasmoid() {
     echo "Installing ddcci-brightness plasmoid"
     git clone https://github.com/davidhi7/ddcci-plasmoid.git $TMP_DIR/ddcci-plasmoid
     kpackagetool6 -t Plasma/Applet -i $TMP_DIR/ddcci-plasmoid/plasmoid
-    echo Backend executable command must be set to ~/.local/bin/ddcci_plasmoid_backend (without python3 or anything else before).
+    echo "Backend executable command must be set to ~/.local/bin/ddcci_plasmoid_backend (without python3 or anything else before)."
   fi
 
 }
