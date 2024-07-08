@@ -255,7 +255,7 @@ install_git_credential_github() {
 
 install_ddcci-plasmoid() {
   # if pipx ddcci-plasmoid is not installed, install it
-  if ! command -v ddcci-plasmoid-backend &> /dev/null; then
+  if ! command -v ddcci_plasmoid_backend &> /dev/null; then
     echo "Installing ddcci-plasmoid-backend"
     pipx install ddcci-plasmoid-backend
   fi
@@ -267,7 +267,19 @@ install_ddcci-plasmoid() {
     kpackagetool6 -t Plasma/Applet -i $TMP_DIR/ddcci-plasmoid/plasmoid
     echo "Backend executable command must be set to ~/.local/bin/ddcci_plasmoid_backend (without python3 or anything else before)."
   fi
+}
 
+setup_modprobe_d() {
+  # cycle through $CHEZMOI_SOURCE_DIR/.modprobe and copy to /etc/modprobe.d if mtime differs
+  for modprobe in $(ls $CHEZMOI_SOURCE_DIR/.modprobe); do
+    if [ -f /etc/modprobe.d/$modprobe ]; then
+      if [ $(stat -c %Y $CHEZMOI_SOURCE_DIR/.modprobe/$modprobe) -eq $(stat -c %Y /etc/modprobe.d/$modprobe) ]; then
+        continue
+      fi
+    fi
+    echo "Copying $modprobe to /etc/modprobe.d"
+    sudo cp $CHEZMOI_SOURCE_DIR/.modprobe/$modprobe /etc/modprobe.d/
+  done
 }
 
 # ask for sudo password to cache it early in case we need it later
@@ -288,6 +300,7 @@ install_topgrade
 install_git_credential_github
 setup_i2c
 install_ddcci-plasmoid
+setup_modprobe_d
 
 ## End of Kinoite specific setup
 {{ end -}}
