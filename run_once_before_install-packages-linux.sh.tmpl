@@ -282,6 +282,13 @@ setup_modprobe_d() {
   done
 }
 
+install_startship_prompt() {
+  if [ ! -f ~/.local/bin/starship ]; then
+    echo "Installing starship prompt"
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+  fi
+}
+
 # ask for sudo password to cache it early in case we need it later
 # not a gurantee, but saves time in some cases
 sudo echo "Caching sudo password"
@@ -301,6 +308,7 @@ install_git_credential_github
 setup_i2c
 install_ddcci-plasmoid
 setup_modprobe_d
+install_startship_prompt
 
 ## End of Kinoite specific setup
 {{ end -}}
