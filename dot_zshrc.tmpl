@@ -137,6 +137,12 @@ if command -v register-python-argcomplete &>/dev/null; then
 fi
 
 export GPG_TTY=$(tty)
+
+# Check if gpg-agent is not running
+if ! pgrep -u "$USER" gpg-agent > /dev/null; then
+    gpg-agent --daemon >/dev/null 2>&1
+fi
+
 gpg-connect-agent -q updatestartuptty /bye >/dev/null
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
