@@ -220,12 +220,19 @@ install_fonts() {
 
 ## CA certificates installation using step
 install_ca() {
-  echo "Installing CA certificates"
+  if ! command -v step &> /dev/null; then
+    echo "Downloading step"
+    curl -L https://github.com/smallstep/cli/releases/download/v0.27.4/step_linux_0.27.4_amd64.tar.gz -o $TMP_DIR/step.tar.gz
+    tar -xf $TMP_DIR/step.tar.gz -C $TMP_DIR --strip-components=1
+    cp $TMP_DIR/bin/step ~/bin/
+  fi
+
   if [ -d $HOME/.step ]; then
+    echo "Installing CA certificates"
     echo ".step exists, skipping CA bootstrap"
     return
   fi
-
+  
   step ca bootstrap --ca-url {{ .caUrl }} --fingerprint {{ .caUrlFingerprint }} --install
 }
 
@@ -286,7 +293,7 @@ setup_modprobe_d() {
 install_startship_prompt() {
   if [ ! -f ~/.local/bin/starship ]; then
     echo "Installing starship prompt"
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
+    curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
   fi
 }
 
