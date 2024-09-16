@@ -141,9 +141,8 @@ export GPG_TTY=$(tty)
 # Check if gpg-agent is not running
 if ! pgrep -u "$USER" gpg-agent > /dev/null; then
     gpg-agent --daemon >/dev/null 2>&1
-else
-    SSH_AUTH_SOCK=/run/user/1000/gnupg/S.gpg-agent.ssh; export SSH_AUTH_SOCK;
 fi
+SSH_AUTH_SOCK=/run/user/1000/gnupg/S.gpg-agent.ssh; export SSH_AUTH_SOCK;
 
 gpg-connect-agent -q updatestartuptty /bye >/dev/null
 
