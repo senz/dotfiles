@@ -5,7 +5,7 @@ code
 containerd.io
 ddccontrol
 ddccontrol-gtk
-displaylink
+# displaylink # broken in current kernel # see  https://github.com/ublue-os/akmods/pull/228
 distrobox
 docker-buildx-plugin
 docker-ce
@@ -18,7 +18,7 @@ podman-compose
 python3-pip
 syncthing
 tealdeer
-v4l2loopback
+# v4l2loopback # broken in current kernel
 vim
 wl-clipboard
 zerotier-one
