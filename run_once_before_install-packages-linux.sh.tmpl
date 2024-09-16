@@ -149,15 +149,16 @@ install_ostree() {
     rpm-ostree install --allow-inactive --idempotent -y $rpms_files
   fi
 
-  if command -v kdeconnect-cli &> /dev/null; then
-    echo "Removing preinstalled packages"
-    rpm-ostree override remove \
-      kde-connect \
-      kde-connect-libs \
-      kdeconnectd \
-      firefox \
-      firefox-langpacks
-  fi
+  # this makes upgrade hella slow, disabled for now
+  # if command -v kdeconnect-cli &> /dev/null; then
+  #   echo "Removing preinstalled packages"
+  #   rpm-ostree override remove \
+  #     kde-connect \
+  #     kde-connect-libs \
+  #     kdeconnectd \
+  #     firefox \
+  #     firefox-langpacks
+  # fi
 
   echo "Applying ostree changes (best effort)"
   sudo rpm-ostree apply-live || true
