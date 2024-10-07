@@ -64,6 +64,7 @@ chezmoi purge
 - [ ] (Linux) btrbk systemd timer, config
 - [ ] (Linux) [vial udev rules](https://get.vial.today/manual/linux-udev.html)
 - [ ] (Linux) `sudo systemctl enable zerotier-one.service && sudo systemctl start zerotier-one.service` 
+- [ ] (Linux) `sudo bash -c 'grep -E '^dialout:' /usr/lib/group >> /etc/group' && sudo usermod -a -G dialout $USER`
 
 <details>
     <summary>Sync settings.yml</summary>

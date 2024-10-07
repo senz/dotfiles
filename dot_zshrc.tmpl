@@ -150,6 +150,9 @@ if command -v starship &>/dev/null; then
   eval "$(starship init zsh)"
 fi
 
+export NVS_HOME="$HOME/.nvs"
+[ -s "/var/home/senz/.nvs/nvs.sh" ] && . "/var/home/senz/.nvs/nvs.sh"
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

@@ -192,6 +192,13 @@ install_nerd_fonts() {
   done
 }
 
+install_nvs() {
+  if [ -n "$NVS_HOME" ] && [ ! -d "$NVS_HOME" ]; then
+    echo "NVS_HOME is set, but nvs is not installed, installing"
+    git clone https://github.com/jasongin/nvs "$NVS_HOME"
+  fi
+}
+
 setup_i2c() {
   # creating i2c group
   if ! getent group i2c &>/dev/null; then
@@ -317,6 +324,7 @@ setup_i2c
 install_ddcci-plasmoid
 setup_modprobe_d
 install_startship_prompt
+install_nvs
 
 ## End of Kinoite specific setup
 {{ end -}}
