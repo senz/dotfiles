@@ -18,7 +18,7 @@ podman-compose
 python3-pip
 syncthing
 tealdeer
-# v4l2loopback # broken in current kernel
+v4l2loopback
 vim
 wl-clipboard
 zerotier-one
