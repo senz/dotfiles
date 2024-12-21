@@ -5,11 +5,13 @@ com.github.wwmm.easyeffects
 com.github.zocker_160.SyncThingy
 com.obsproject.Studio
 com.rafaelmardojai.Blanket
+io.github.flattool.Warehouse
 io.github.tdesktop_x64.TDesktop
 md.obsidian.Obsidian
 me.timschneeberger.jdsp4linux
 org.darktable.Darktable
 org.gnome.Evince
+org.kde.gwenview
 org.kde.krita
 org.kde.okular
 org.libreoffice.LibreOffice
