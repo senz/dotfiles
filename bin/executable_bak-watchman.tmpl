@@ -13,6 +13,8 @@ X_USERID="1000"
 LOCAL_BAK_MOUNT_POINT="/mnt/fw1tb"
 LAST_BAK_TIME="- 1 day"
 DAY_ROTATION_TIME="0700"
+BTRBK_LOCK_FILE="/var/lock/btrbk.lock"
+WAIT_TIME_SEC="300"
 
 # check if sudo
 if [ "$(id -u)" -ne 0 ]; then
@@ -28,6 +30,21 @@ notify_error() {
 trap 'EXIT_CODE=$?; if [ $EXIT_CODE -ne 0 ]; then notify_error "Script failed with exit code $EXIT_CODE"; fi' EXIT
 
 ERROR_MESSAGE=""
+
+if [ -f "$BTRBK_LOCK_FILE" ]; then
+    for i in $(seq 1 $WAIT_TIME_SEC); do
+        if [ ! -f "$BTRBK_LOCK_FILE" ]; then
+            break
+        fi
+        sleep 1
+    done
+    if [ -f "$BTRBK_LOCK_FILE" ]; then
+        ERROR_MESSAGE+="btrbk is still running. "
+        notify_error "$ERROR_MESSAGE"
+        exit 0
+    fi
+fi
+
 # check if btrbk latest back is no older then $LAST_BAK_TIME
 # btrbk list latest --format=raw
 # output: format="latest" type='snapshot,backup' source_url='/home' source_host='' source_port='' source_subvolume='/home' snapshot_subvolume='/home/.btrbk_snapshots/home.20240526T1906' snapshot_name='home' status='' target_url='/mnt/fw1tb/.btrbk_snapshots/home.20240526T1906' target_host='' target_port='' target_subvolume='/mnt/fw1tb/.btrbk_snapshots/home.20240526T1906' target_type='send-receive' source_rsh='' target_rsh=''
