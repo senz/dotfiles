@@ -33,12 +33,12 @@ ERROR_MESSAGE=""
 
 if [ -f "$BTRBK_LOCK_FILE" ]; then
     for i in $(seq 1 $WAIT_TIME_SEC); do
-        if [ ! -f "$BTRBK_LOCK_FILE" ]; then
+        if ! flock -n "$BTRBK_LOCK_FILE" /usr/bin/true; then
             break
         fi
         sleep 1
     done
-    if [ -f "$BTRBK_LOCK_FILE" ]; then
+    if ! flock -n "$BTRBK_LOCK_FILE" /usr/bin/true; then
         ERROR_MESSAGE+="btrbk is still running. "
         notify_error "$ERROR_MESSAGE"
         exit 0
