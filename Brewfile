@@ -56,9 +56,13 @@ brew "wget"
 cask "brave-browser"
 # Free and open-source web browser
 cask "chromium"
-# Free monospaced font with programming ligatures
+# Fonts with ligatures, monospaced and with symbols
 cask "font-fira-code"
 cask "font-noto-emoji"
+cask "font-monoid-nerd-font"
+cask "font-hack"
+cask "font-noto-color-emoji"
+cask "font-dejavu-sans-mono-nerd-font"
 # Finder replacement and FTP, SFTP, WebDAV and Amazon s3 client
 cask "forklift"
 # Cross-platform Git credential storage for multiple hosting providers
@@ -103,3 +107,5 @@ brew "lazydocker"
 cask "bitwarden"
 # apply-user-defaults is a tool to apply mac user defaults from a file
 brew "apply-user-defaults"
+# startship.rs is a fast and customizable prompt for any shell!
+brew "starship"
