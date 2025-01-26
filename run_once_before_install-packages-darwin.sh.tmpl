@@ -20,7 +20,12 @@ export HOMEBREW_CASK_OPTS=--no-quarantine
 # rendering directly in template, so chezmoi could detect a change of content
 brew bundle install -v --no-lock --file=/dev/stdin <<EOF
 {{ joinPath .chezmoi.sourceDir "Brewfile" | include }}
+{{- if eq .setupprofile "personal" -}}
+{{ joinPath .chezmoi.sourceDir "Brewfile.pers-plain" | include }}
 {{ joinPath .chezmoi.sourceDir "Brewfile.pers.asc" | include | decrypt }}
+{{- else if eq .setupprofile "work" -}}
+{{ joinPath .chezmoi.sourceDir "Brewfile.work" | include }}
+{{- end -}}
 EOF
 
 {{ end -}}

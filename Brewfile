@@ -1,8 +1,11 @@
 tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
 tap "homebrew/services"
 tap "senz/homebrew-tap"
+tap "nikitabobko/tap"
+tap "zero-sh/tap"
+tap "koekeishiya/formulae"
+
+# This file contains common part shared between setup profiles
 
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
@@ -12,8 +15,6 @@ brew "bat-extras"
 brew "chezmoi"
 # Tool for exploring each layer in a docker image
 brew "dive"
-# Lightweight DNS forwarder and DHCP server
-brew "dnsmasq", restart_service: true
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Command-line fuzzy finder written in Go
@@ -23,7 +24,6 @@ brew "git"
 # Git extension for versioning large files
 brew "git-lfs"
 # Lightweight and flexible command-line JSON processor
-brew "jq"
 brew "yq"
 brew "pre-commit"
 # Kubernetes CLI To Manage Your Clusters In Style!
@@ -42,8 +42,6 @@ brew "pipx"
 brew "poetry"
 # Python version management
 brew "pyenv"
-# Unofficial Bitwarden CLI client
-brew "rbw"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Wrapper around ripgrep that adds multiple rich file types
@@ -54,26 +52,10 @@ brew "topgrade"
 brew "unar"
 # Internet file retriever
 brew "wget"
-# GPU-accelerated terminal emulator
-cask "alacritty"
-# Automatic tiling window manager similar to xmonad
-cask "amethyst"
-# Tool to flash OS images to SD cards & USB drives
-cask "balenaetcher"
 # Web browser focusing on privacy
 cask "brave-browser"
-# E-books management software
-cask "calibre"
 # Free and open-source web browser
 cask "chromium"
-# Photography workflow application and raw developer
-cask "darktable"
-# App to build and share containerised applications and microservices
-cask "docker"
-# Elgato FACECAM configuration tool
-cask "elgato-camera-hub"
-# Assign keys, and then decorate and label them
-cask "elgato-stream-deck"
 # Free monospaced font with programming ligatures
 cask "font-fira-code"
 cask "font-noto-emoji"
@@ -85,8 +67,6 @@ cask "git-credential-manager"
 cask "gpg-suite"
 # Graphically shows disk usage within a file system
 cask "grandperspective"
-# Preview and audit Kindle eBooks
-cask "kindle-previewer"
 # Free and open-source painting and sketching program
 cask "krita"
 # Tool to control external monitor brightness & volume
@@ -97,29 +77,29 @@ cask "mutedeck"
 cask "obs"
 # Android file transfer
 cask "openmtp"
-# System monitor for the menu bar
-cask "stats"
-# Media player based on MPlayer and mplayer2
-cask "stolendata-mpv"
 # Real time file synchronisation software
 cask "syncthing"
 # Unpacks archive files
 cask "the-unarchiver"
-# Open-source BitTorrent client
-cask "transmission"
 # Virtual machines UI using QEMU
 cask "utm"
-# OpenVPN client with AppleScript support
-cask "viscosity"
 # Open-source code editor
 cask "visual-studio-code"
 # Multimedia player
 cask "vlc"
-# Resources for Wacom tablets
-cask "wacom-tablet"
-# Compatibility layer to run Windows applications
-cask "wine-devel"
-# Discord and SpaceBar client implemented without Discord API
-cask "webcord"
-
-mas "Brother P-touch Editor", id: 1453365242
+# lets you hide menu bar items to give your Mac a cleaner look
+cask "hiddenbar"
+# Obsidian is a powerful knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
+# yabai is a window management utility that is designed to work as an extension to the built-in window manager of macOS
+brew "yabai"
+# python-argcomplete provides easy, extensible command line tab completion of arguments for your Python script
+brew "python-argcomplete"
+# Container runtimes on macOS (and Linux) with minimal setup
+brew "colima"
+# lazydocker is a simple terminal UI for both docker and docker-compose
+brew "lazydocker"
+# bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+cask "bitwarden"
+# apply-user-defaults is a tool to apply mac user defaults from a file
+brew "apply-user-defaults"

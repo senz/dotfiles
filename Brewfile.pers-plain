@@ -1,0 +1,21 @@
+# Unofficial Bitwarden CLI client
+brew "rbw"
+# Tool to flash OS images to SD cards & USB drives
+cask "balenaetcher"
+# OpenVPN client with AppleScript support
+cask "viscosity"
+# Open-source BitTorrent client
+cask "transmission"
+# Discord and SpaceBar client implemented without Discord API
+cask "legcord"
+# Preview and audit Kindle eBooks
+cask "kindle-previewer"
+# Elgato prompter configuration tool
+cask "elgato-camera-hub"
+# Photography workflow application and raw developer
+cask "darktable"
+# E-books management software
+cask "calibre"
+
+# Brother P-touch Editor
+mas "Brother P-touch Editor", id: 1453365242
