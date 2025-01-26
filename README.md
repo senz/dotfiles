@@ -96,6 +96,12 @@ Files suffixed with `.pers.asc` are encrypted protions of main files. They are d
 
 ## TODO
 
+[ ] Homebrew for linux install
+[ ] Detect/separate devcontainer environment
+[ ] bak-watchman SELinux policy to execute
+[ ] bak-watchman detect btrbk running, retry
+[ ] bak-watchman reduce run frequency
+
 Package specs:
 
 - comparing installed packages with package manifest, reporting differences

@@ -1,4 +1,3 @@
-com.behringer.XAirEdit
 com.calibre_ebook.calibre
 com.github.marhkb.Pods
 com.github.wwmm.easyeffects
@@ -8,7 +7,6 @@ com.rafaelmardojai.Blanket
 io.github.flattool.Warehouse
 io.github.tdesktop_x64.TDesktop
 md.obsidian.Obsidian
-me.timschneeberger.jdsp4linux
 org.darktable.Darktable
 org.gnome.Evince
 org.kde.gwenview
@@ -19,4 +17,3 @@ org.musicbrainz.Picard
 org.qbittorrent.qBittorrent
 org.videolan.VLC
 org.wezfurlong.wezterm
-xyz.armcord.ArmCord

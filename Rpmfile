@@ -3,10 +3,10 @@ brave-browser
 btrbk
 code
 containerd.io
-ddccontrol
-ddccontrol-gtk
+# ddccontrol
+# ddccontrol-gtk
 # displaylink # broken in current kernel # see  https://github.com/ublue-os/akmods/pull/228
-distrobox
+# distrobox
 docker-buildx-plugin
 docker-ce
 docker-ce-cli
@@ -23,6 +23,10 @@ vim
 wl-clipboard
 zerotier-one
 zsh
+libavcodec-freeworld
+mesa-va-drivers-freeworld
+mesa-vdpau-drivers-freeworld
+# tpm2-abrmd
 "https://dl.smallstep.com/gh-release/cli/gh-release-header/v0.27.2/step-cli_0.27.2_amd64.rpm"
 "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
 "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
