@@ -31,10 +31,10 @@ data:
     fullname: {{ $fullname | quote }}
     ghlogin: {{ $ghlogin | quote }}
     setupprofile: {{ $setupprofile | quote }}
-{{ if eq $setupprofile "personal" -}}
+{{- if eq $setupprofile "personal" }}
     caUrl: "https://ca.dnbtech.dev:9443"
     caUrlFingerprint: "e0a248cd4ee597d453bfe580b66979ada31a5efbeebdb2ec6e9533074f671efd"
-{{- end -}}
+{{- end }}
 gpg:
     recipient: {{ $recipient | quote }}
 

@@ -27,7 +27,7 @@ libavcodec-freeworld
 mesa-va-drivers-freeworld
 mesa-vdpau-drivers-freeworld
 # tpm2-abrmd
-"https://dl.smallstep.com/gh-release/cli/gh-release-header/v0.27.2/step-cli_0.27.2_amd64.rpm"
-"https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-"https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+"https://dl.smallstep.com/gh-release/cli/gh-release-header/v0.28.6/step-cli-0.28.6-1.x86_64.rpm"
+#"https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+#"https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 # "https://github.com/rpmsphere/noarch/raw/master/r/rpmsphere-release-38-1.noarch.rpm"

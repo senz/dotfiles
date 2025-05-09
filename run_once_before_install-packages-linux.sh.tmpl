@@ -3,7 +3,7 @@
 set -eu
 
 ### Settings and versions
-NERD_FONT_VERSION=3.2.1
+NERD_FONT_VERSION=3.4.0
 NERD_FONT_FAMILIES=(
   "FiraCode"
   "FiraMono"
@@ -18,7 +18,7 @@ NERD_FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/"
 
 USER_FONT_DIR="$HOME/.local/share/fonts"
 
-TOPGRADE_VERSION=14.0.1
+TOPGRADE_VERSION=16.0.3
 GITHUB_CREDENTIAL_VERSION=2.2.0
 
 # TODO move to chezmoi data
@@ -43,9 +43,11 @@ install_flatpaks() {
 
   local flatpaks=(
 {{ joinPath .chezmoi.sourceDir "Pakfile" | include }}
-{{ joinPath .chezmoi.sourceDir "Pakfile.pers.asc" | include | decrypt }}
+{{ joinPath .chezmoi.sourceDir "Pakfile.pers.asc" | include | decrypt -}}
   )
 
+  # on the first run you need to reinstal fedora sourced packages
+  #flatpak install -y --reinstall flathub "${flatpaks[@]}"
   flatpak install -y flathub "${flatpaks[@]}"
 }
 
@@ -107,7 +109,8 @@ install_ostree() {
   echo "Installing ostree packages"
   local rpmfile=(
     {{ joinPath .chezmoi.sourceDir "Rpmfile.pers.asc" | include | decrypt -}}
-    {{- joinPath .chezmoi.sourceDir "Rpmfile" | include -}}
+    {{ joinPath .chezmoi.sourceDir "Rpmfile" | include }}
+#    {{ joinPath .chezmoi.sourceDir "Rpmfile.40" | include }}
   )
 
   # setting up non-rh repos
@@ -119,6 +122,12 @@ install_ostree() {
     echo "Copying $repo to /etc/yum.repos.d"
     sudo cp "{{ .chezmoi.sourceDir }}/yum.repos.d/$repo" /etc/yum.repos.d/
   done
+  rpm-ostree install -y --allow-inactive --idempotent \
+  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
+  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+
+  sudo rpm-ostree apply-live || true
+  rpm-ostree update
 
   # setting up gpg keys
   echo "Setting up gpg keys"
@@ -160,6 +169,11 @@ install_ostree() {
   #     firefox-langpacks
   # fi
 
+  echo "overriding some base multimedia packages"
+  # see https://rpmfusion.org/Howto/Multimedia
+  # https://rpmfusion.org/Howto/OSTree?highlight=%28%5CbCategoryHowto%5Cb%29#Installation
+  rpm-ostree override replace ffpmeg-free ffmpeg --experimental --from repo=rpmfusion-nonfree
+
   echo "Applying ostree changes (best effort)"
   sudo rpm-ostree apply-live || true
 }
@@ -168,11 +182,11 @@ install_ostree() {
 ## TODO: deprecated in favor of distrobox
 setup_toolbx() {
   echo "Setting up toolbox"
-  if ! toolbox list -c | grep -q "ubuntu-toolbox-23.10"; then
-    toolbox -y create --distro ubuntu --release 23.10
+  if ! toolbox list -c | grep -q "ubuntu-toolbox-24.04"; then
+    toolbox -y create --distro ubuntu --release 24.04
   fi
-  if ! toolbox list -c | grep -q "fedora-toolbox-40"; then
-    toolbox -y create --distro fedora --release 40
+  if ! toolbox list -c | grep -q "fedora-toolbox-41"; then
+    toolbox -y create --distro fedora --release 41
   fi
 }
 
@@ -193,9 +207,9 @@ install_nerd_fonts() {
 }
 
 install_nvs() {
-  if [ -n "$NVS_HOME" ] && [ ! -d "$NVS_HOME" ]; then
+  if [ -n "${NVS_HOME-}" ] && [ ! -d "${NVS_HOME-}" ]; then
     echo "NVS_HOME is set, but nvs is not installed, installing"
-    git clone https://github.com/jasongin/nvs "$NVS_HOME"
+    git clone https://github.com/jasongin/nvs "${NVS_HOME-}"
   fi
 }
 
@@ -316,7 +330,8 @@ remove_flatpaks
 install_flatpaks
 install_appimages
 setup_toolbx
-install_ca
+# TODO: reestablish CA infra
+#install_ca
 install_fonts
 install_topgrade
 install_git_credential_github

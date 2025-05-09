@@ -55,7 +55,7 @@ chezmoi purge
 ```
 ## Manual checklist
 
-- [ ] Import gpg key stubs
+- [ ] Import gpg key stubs `# gpg --card-edit; \ fetch`
 - [ ] Authorize syncthing
 - [ ] Sync Brave settings/extensions...
 - [ ] Install CA
