@@ -110,7 +110,6 @@ install_ostree() {
   local rpmfile=(
     {{ joinPath .chezmoi.sourceDir "Rpmfile.pers.asc" | include | decrypt -}}
     {{ joinPath .chezmoi.sourceDir "Rpmfile" | include }}
-#    {{ joinPath .chezmoi.sourceDir "Rpmfile.40" | include }}
   )
 
   # setting up non-rh repos
