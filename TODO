@@ -8,6 +8,7 @@ HW specific config:
 - laptop specific sound settings checklist/automation
 - display color profile
 - display scaling factor 2
+- internal keys rebinding: CapsLock to LCTRL
 
 Refs:
 
