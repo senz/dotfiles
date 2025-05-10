@@ -6,4 +6,5 @@ chezmoi
 .devcontainer/devcontainer-lock.json
 *.pers
 *.swp
+.aider*
 
