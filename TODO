@@ -12,4 +12,7 @@ HW specific config:
 Refs:
 
 https://wiki.archlinux.org/title/Framework_Laptop_13
-
+https://github.com/ceiphr/ee-framework-presets (principle applies to 13 AI but settings are different, so just for general reference)
+https://sourceforge.net/p/equalizerapo/wiki/Configuration%20reference/
+https://github.com/FrameworkComputer/linux-docs/tree/main/easy-effects
+https://github.com/cab404/framework-dsp
