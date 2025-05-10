@@ -3,6 +3,15 @@
 - btrbk config
 - split run befor linux script into more parts
 - fix nvtop and feishin appimage links
+- disable fedora auto update checks in discovery
+
+Reading the value.
+```
+ kreadconfig6 --file PlasmaDiscoverUpdates --group "Global" --key RequiredNotificationInterval
+-1
+```
+
+Writing with kwriteconfig6
 
 HW specific config:
 - laptop specific sound settings checklist/automation
@@ -17,3 +26,5 @@ https://github.com/ceiphr/ee-framework-presets (principle applies to 13 AI but s
 https://sourceforge.net/p/equalizerapo/wiki/Configuration%20reference/
 https://github.com/FrameworkComputer/linux-docs/tree/main/easy-effects
 https://github.com/cab404/framework-dsp
+http://www.linux-commands-examples.com/kreadconfig
+
