@@ -4,8 +4,6 @@ com.github.wwmm.easyeffects
 com.github.zocker_160.SyncThingy
 com.obsproject.Studio
 com.rafaelmardojai.Blanket
-io.github.flattool.Warehouse
-io.github.tdesktop_x64.TDesktop
 md.obsidian.Obsidian
 org.darktable.Darktable
 org.gnome.Evince
@@ -17,3 +15,5 @@ org.musicbrainz.Picard
 org.qbittorrent.qBittorrent
 org.videolan.VLC
 org.wezfurlong.wezterm
+#org.telegram.desktop
+

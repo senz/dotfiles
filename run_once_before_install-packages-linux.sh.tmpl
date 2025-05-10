@@ -318,6 +318,12 @@ install_startship_prompt() {
   fi
 }
 
+install_homebrew() {
+  if ! command -v brew &> /dev/null; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+}
+
 # ask for sudo password to cache it early in case we need it later
 # not a gurantee, but saves time in some cases
 sudo echo "Caching sudo password"
@@ -340,6 +346,7 @@ install_ddcci-plasmoid
 setup_modprobe_d
 install_startship_prompt
 install_nvs
+install_homebrew
 
 ## End of Kinoite specific setup
 {{ end -}}

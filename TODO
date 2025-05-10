@@ -1,0 +1,15 @@
+- brew bundle for linux and Brewfile
+- refine checlist - is it possible to move things into script?
+- btrbk config
+- split run befor linux script into more parts
+- fix nvtop and feishin appimage links
+
+HW specific config:
+- laptop specific sound settings checklist/automation
+- display color profile
+- display scaling factor 2
+
+Refs:
+
+https://wiki.archlinux.org/title/Framework_Laptop_13
+

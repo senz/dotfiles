@@ -24,7 +24,7 @@ wl-clipboard
 zerotier-one
 zsh
 libavcodec-freeworld
-mesa-va-drivers-freeworld
+#mesa-va-drivers-freeworld # this one needs to be manually overrided
 mesa-vdpau-drivers-freeworld
 # tpm2-abrmd
 "https://dl.smallstep.com/gh-release/cli/gh-release-header/v0.28.6/step-cli-0.28.6-1.x86_64.rpm"
