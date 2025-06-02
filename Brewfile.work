@@ -13,3 +13,6 @@ brew "kubectx"
 brew "tealdeer"
 brew "felinks"
 cask "block-goose"
+brew "nvs"
+brew "docker-buildx" # required for colima
+
