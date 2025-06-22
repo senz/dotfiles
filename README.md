@@ -58,6 +58,7 @@ chezmoi purge
 - [ ] Import gpg key stubs `# gpg --card-edit; \ fetch`
 - [ ] Authorize syncthing
 - [ ] Sync Brave settings/extensions...
+- [ ] brave://settings/extensions toggle `Widevine` to enable DRM video
 - [ ] Install CA
 - [ ] Install VSCode [Sync Settings](https://marketplace.visualstudio.com/items?itemName=zokugun.sync-settings) extension and `download`
 - [ ] (Linux) [nitropy](https://docs.nitrokey.com/software/nitropy/linux/udev) and [companion](https://github.com/bitfocus/companion/blob/main/assets/linux/50-companion-desktop.rules) udev rules

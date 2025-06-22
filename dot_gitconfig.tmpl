@@ -21,6 +21,8 @@
 [gpg]
 {{ if (eq .chezmoi.os "darwin") }}
 	program = /usr/local/MacGPG2/bin/gpg2
+{{ else if (eq .chezmoi.os "linux") }}
+	program = /usr/bin/gpg
 {{ end -}}
 [commit]
 	gpgsign = true

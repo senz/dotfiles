@@ -118,6 +118,7 @@ setopt HIST_IGNORE_SPACE
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 {{ if (and (index .chezmoi.osRelease "variantID") (eq .chezmoi.osRelease.variantID "kinoite")) -}}
+# Adds clipboards content to zhistory as the last entry. Useful with spaces and quotes in a command
 alias zhistory_paste='echo : `expr $(date +%s) + 1`:0\;`printf "$(wl-paste -pn)\n"` >> ~/.zsh_history && fc -R'
 {{ end -}}
 
@@ -152,6 +153,19 @@ fi
 
 export NVS_HOME="$HOME/.nvs"
 [ -s "$HOME/.nvs/nvs.sh" ] && . "$HOME/.nvs/nvs.sh"
+
+{{ if (eq .chezmoi.os "linux") -}}
+# Homebrew
+if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+  export HOMEBREW_NO_ANALYTICS=1
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{ end -}}
+
+{{ if (eq .chezmoi.os "linux") -}}
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/var/home/senz/.lmstudio/bin"
+{{ end -}}
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
