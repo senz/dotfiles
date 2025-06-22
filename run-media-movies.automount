@@ -1,0 +1,11 @@
+[Unit]
+Description=Automount CIFS share for movies
+After=network-online.target
+Wants=network-online.target
+
+[Automount]
+Where=/run/media/movies
+TimeoutIdleSec=3000
+
+[Install]
+WantedBy=multi-user.target

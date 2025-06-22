@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Create the mount point directory
+sudo mkdir -p /run/media/movies
+sudo chown senz:senz /run/media/movies
+
+# Copy credentials file to system location and set proper permissions
+sudo cp ~/.smbcredentials /etc/smbcredentials-movies
+sudo chmod 600 /etc/smbcredentials-movies
+sudo chown root:root /etc/smbcredentials-movies
+
+# Copy systemd unit files to system location
+sudo cp "{{ .chezmoi.sourceDir }}/run-media-movies.mount" /etc/systemd/system/
+sudo cp "{{ .chezmoi.sourceDir }}/run-media-movies.automount" /etc/systemd/system/
+
+# Set proper permissions
+sudo chmod 644 /etc/systemd/system/run-media-movies.mount
+sudo chmod 644 /etc/systemd/system/run-media-movies.automount
+
+# Reload systemd and enable the automount service
+sudo systemctl daemon-reload
+sudo systemctl enable run-media-movies.automount
+sudo systemctl start run-media-movies.automount
+
+echo "Media automount configured successfully!"
+echo "The share will be automatically mounted when you access /run/media/movies"
+echo "You can also access it via the symlink /media/movies"
+echo "It will unmount after 50 minutes of inactivity"
