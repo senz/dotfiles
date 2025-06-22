@@ -1,3 +1,4 @@
+---
 NSGlobalDomain:
   # System Preferences > Keyboard > Shortcuts > Full Keyboard Access > All
   # controls.
@@ -23,10 +24,10 @@ NSGlobalDomain:
   # Now, you can move windows by holding ctrl+cmd and dragging any part of the window (not necessarily the window title)
   NSWindowShouldDragOnGesture: true
 
-  # Set the initial key repeat delay 
+  # Set the initial key repeat delay
   InitialKeyRepeat: 15
   KeyRepeat: 2
-  
+
 com.apple.desktopservices:
   # Disable .DS_Store files on network drives.
   DSDontWriteNetworkStores: true
