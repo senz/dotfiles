@@ -1,0 +1,29 @@
+# This is the configuration file for Ghostty.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+shell-integration-features = sudo,no-cursor
+font-family = ""
+font-family = "Monoid Nerd Font Mono"
+font-family = "Fira Code"
+font-family = "Hack"
+font-family = "DejaVu Sans Mono"
+font-family = "Noto Color Emoji"
+theme = zenburned
+cursor-style-blink = false
+cursor-style = block
+copy-on-select = true
+
+custom-shader = ~/.config/ghostty/shaders/amber_crt.glsl
+custom-shader = ~/.config/ghostty/shaders/bloom.glsl
+custom-shader-animation = true
+
+window-padding-x = 6
+window-padding-y = 4
+
+window-vsync = false
+
